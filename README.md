@@ -116,7 +116,7 @@ That's not a merge conflict - it's git refusing to let you push because your loc
 
 ## Module 6: Finding the cause of bugs (`git blame`)
 
-Not every bug announces itself with a compiler error. Write a tiny scratch program that calls `mathlib::percentile` with a percentile of exactly `100` on any sorted list of doubles. Something's wrong - and none of the existing unit tests catch it, because none of them happen to test that exact value.
+Not every bug announces itself with a compiler error. There's a commented-out test in [tests/test_stats.cpp](./tests/test_stats.cpp) - `PercentileTest.HundredthPercentile` - that calls `mathlib::percentile` with a percentile of exactly `100`. Uncomment it and rerun the suite (`ctest --test-dir build --output-on-failure`). Something's wrong - and until you uncommented it, nothing in the suite caught it.
 
 Time to find out which commit is responsible. Run `git blame src/mathlib.cpp` - every line gets annotated with the commit that last touched it, plus who and when. Find the line doing the suspicious index math and note its commit hash.
 
@@ -148,19 +148,7 @@ On your own branch (`git switch feature/<your name>-new-functions`), run `git ch
 
 If it applies cleanly, you're done. If it conflicts, you'll see the same conflict markers as Module 3 - fix them, `git add` the file, then `git cherry-pick --continue` (or `git cherry-pick --abort` if you'd rather bail out entirely).
 
-## Module 9: Cleaning up local commits (`git rebase`)
-
-If your branch is full of `wip`, `fix`, `actually fix it this time` commits, clean it up before you push or open a PR.
-
-`git log --oneline main..feature/<your name>-new-functions` shows just your branch's commits - everything reachable from your branch but not from `main`.
-
-Run `git rebase -i main`. This opens an editor listing those commits oldest-first, each marked `pick`. Change `pick` to `squash` (or just `s`) on every commit you want folded into the one above it, then save and close.
-
-Git will then open a second editor so you can write one clean commit message for the combined commit - replace the auto-generated mess with something that actually describes the change.
-
-One catch: only rebase commits you haven't shared yet, or that you're prepared to force-push over. If you already pushed this branch in Module 5, you'll need `git push --force-with-lease` afterward to update the remote - never plain `--force` (you could wipe out a partner's pushed work), and never rebase `main` itself.
-
-## Module 10: Opening a Pull Request
+## Module 9: Opening a Pull Request
 
 Everything so far has been local git, or a raw `git push`. A pull request (PR) is GitHub's layer on top of that: a request to merge one branch into another, with a place for discussion, automated checks, and required approvals before it's allowed to land.
 
@@ -201,9 +189,17 @@ A few functions are left unimplemented on purpose, and throw
 
 * `mathlib::isPrime` — implement a primality check.
 * `mathlib::gcd` — implement Euclid's algorithm (should return a
-  non-negative result even for negative inputs).
+  non-negative result even for negative inputs). There's pseudocode for it
+  in a comment in `mathlib.cpp`.
+* `mathlib::lcm` — implement the least common multiple (needs
+  `mathlib::gcd` working first).
 * `mathlib::power` — works for non-negative exponents already; extend it to
   handle negative exponents too (e.g. `power(2.0, -2) == 0.25`).
+* `mathlib::fibonacci` — implement the nth Fibonacci number, iteratively
+  (there's pseudocode in `mathlib.cpp` - avoid the naive recursive version,
+  it's exponentially slow).
+* `mathlib::isPerfectSquare` — check whether a number is a perfect square,
+  without using floating-point `sqrt()` (pseudocode in `mathlib.cpp`).
 
 Each has a matching test in `tests/` that's currently named with a
 `DISABLED_` prefix and already has the expected assertions written in.
