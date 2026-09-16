@@ -5,6 +5,7 @@
 using mathlib::average;
 using mathlib::maxValue;
 using mathlib::minValue;
+using mathlib::percentile;
 
 TEST(AverageTest, SingleElement) {
     EXPECT_DOUBLE_EQ(average({4.0}), 4.0);
@@ -52,4 +53,24 @@ TEST(MaxValueTest, AEqualsB) {
 
 TEST(MaxValueTest, Negatives) {
     EXPECT_DOUBLE_EQ(maxValue(-5.0, -2.0), -2.0);
+}
+
+TEST(PercentileTest, ZerothPercentile) {
+    EXPECT_DOUBLE_EQ(percentile({10.0, 20.0, 30.0, 40.0}, 0.0), 10.0);
+}
+
+TEST(PercentileTest, TwentyFifthPercentile) {
+    EXPECT_DOUBLE_EQ(percentile({10.0, 20.0, 30.0, 40.0}, 25.0), 20.0);
+}
+
+TEST(PercentileTest, FiftiethPercentile) {
+    EXPECT_DOUBLE_EQ(percentile({10.0, 20.0, 30.0, 40.0}, 50.0), 30.0);
+}
+
+TEST(PercentileTest, SeventyFifthPercentile) {
+    EXPECT_DOUBLE_EQ(percentile({10.0, 20.0, 30.0, 40.0}, 75.0), 40.0);
+}
+
+TEST(PercentileTest, HundredthPercentileNotImplementedThrows) {
+    EXPECT_THROW(percentile({10.0, 20.0, 30.0, 40.0}, 100.0), std::logic_error);
 }

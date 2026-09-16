@@ -37,6 +37,12 @@ double maxValue(double a, double b);
 /// @return The arithmetic mean of all elements in values.
 double average(const std::vector<double>& values);
 
+/// Returns the value at the given percentile of a sorted list.
+/// @param sortedValues Values sorted in ascending order.
+/// @param percentile A value in [0, 100).
+/// @throws std::logic_error if percentile is 100 - not implemented yet.
+double percentile(const std::vector<double>& sortedValues, double percentile);
+
 /// Computes the greatest common divisor of a and b.
 /// Not implemented yet - this is a training exercise.
 /// @throws std::logic_error always, for now.
