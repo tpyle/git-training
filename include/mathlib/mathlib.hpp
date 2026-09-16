@@ -39,8 +39,7 @@ double average(const std::vector<double>& values);
 
 /// Returns the value at the given percentile of a sorted list.
 /// @param sortedValues Values sorted in ascending order.
-/// @param percentile A value in [0, 100).
-/// @throws std::logic_error if percentile is 100 - not implemented yet.
+/// @param percentile A value in [0, 100].
 double percentile(const std::vector<double>& sortedValues, double percentile);
 
 /// Computes the greatest common divisor of a and b.

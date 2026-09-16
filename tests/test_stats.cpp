@@ -71,6 +71,7 @@ TEST(PercentileTest, SeventyFifthPercentile) {
     EXPECT_DOUBLE_EQ(percentile({10.0, 20.0, 30.0, 40.0}, 75.0), 40.0);
 }
 
-TEST(PercentileTest, HundredthPercentileNotImplementedThrows) {
-    EXPECT_THROW(percentile({10.0, 20.0, 30.0, 40.0}, 100.0), std::logic_error);
+TEST(PercentileTest, NearTopOfRange) {
+    EXPECT_DOUBLE_EQ(
+        percentile({10.0, 20.0, 30.0, 40.0, 50.0, 60.0, 70.0, 80.0, 90.0, 100.0}, 99.0), 100.0);
 }

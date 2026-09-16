@@ -52,10 +52,6 @@ double average(const std::vector<double>& values) {
 }
 
 double percentile(const std::vector<double>& sortedValues, double percentile) {
-    if (percentile >= 100.0) {
-        // TODO: support percentile == 100 (needs a bounds check on the index below).
-        throw std::logic_error("percentile: percentile >= 100 not implemented yet");
-    }
     std::size_t index = static_cast<std::size_t>(percentile / 100.0 * sortedValues.size());
     return sortedValues[index];
 }
