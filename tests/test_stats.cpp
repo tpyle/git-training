@@ -8,19 +8,23 @@ using mathlib::minValue;
 using mathlib::percentile;
 
 TEST(AverageTest, SingleElement) {
-    EXPECT_DOUBLE_EQ(average({4.0}), 4.0);
+    double values[] = {4.0};
+    EXPECT_DOUBLE_EQ(average(values, 1), 4.0);
 }
 
 TEST(AverageTest, SeveralPositiveElements) {
-    EXPECT_DOUBLE_EQ(average({1.0, 2.0, 3.0, 4.0}), 2.5);
+    double values[] = {1.0, 2.0, 3.0, 4.0};
+    EXPECT_DOUBLE_EQ(average(values, 4), 2.5);
 }
 
 TEST(AverageTest, MixedPositiveAndNegative) {
-    EXPECT_DOUBLE_EQ(average({-2.0, 2.0, 6.0}), 2.0);
+    double values[] = {-2.0, 2.0, 6.0};
+    EXPECT_DOUBLE_EQ(average(values, 3), 2.0);
 }
 
 TEST(AverageTest, Decimals) {
-    EXPECT_DOUBLE_EQ(average({1.5, 2.5}), 2.0);
+    double values[] = {1.5, 2.5};
+    EXPECT_DOUBLE_EQ(average(values, 2), 2.0);
 }
 
 TEST(MinValueTest, ALessThanB) {
@@ -56,22 +60,34 @@ TEST(MaxValueTest, Negatives) {
 }
 
 TEST(PercentileTest, ZerothPercentile) {
-    EXPECT_DOUBLE_EQ(percentile({10.0, 20.0, 30.0, 40.0}, 0.0), 10.0);
+    double values[] = {10.0, 20.0, 30.0, 40.0};
+    EXPECT_DOUBLE_EQ(percentile(values, 4, 0.0), 10.0);
 }
 
 TEST(PercentileTest, TwentyFifthPercentile) {
-    EXPECT_DOUBLE_EQ(percentile({10.0, 20.0, 30.0, 40.0}, 25.0), 20.0);
+    double values[] = {10.0, 20.0, 30.0, 40.0};
+    EXPECT_DOUBLE_EQ(percentile(values, 4, 25.0), 20.0);
 }
 
 TEST(PercentileTest, FiftiethPercentile) {
-    EXPECT_DOUBLE_EQ(percentile({10.0, 20.0, 30.0, 40.0}, 50.0), 30.0);
+    double values[] = {10.0, 20.0, 30.0, 40.0};
+    EXPECT_DOUBLE_EQ(percentile(values, 4, 50.0), 30.0);
 }
 
 TEST(PercentileTest, SeventyFifthPercentile) {
-    EXPECT_DOUBLE_EQ(percentile({10.0, 20.0, 30.0, 40.0}, 75.0), 40.0);
+    double values[] = {10.0, 20.0, 30.0, 40.0};
+    EXPECT_DOUBLE_EQ(percentile(values, 4, 75.0), 40.0);
 }
 
 TEST(PercentileTest, NearTopOfRange) {
-    EXPECT_DOUBLE_EQ(
-        percentile({10.0, 20.0, 30.0, 40.0, 50.0, 60.0, 70.0, 80.0, 90.0, 100.0}, 99.0), 100.0);
+    double values[] = {10.0, 20.0, 30.0, 40.0, 50.0, 60.0, 70.0, 80.0, 90.0, 100.0};
+    EXPECT_DOUBLE_EQ(percentile(values, 10, 99.0), 100.0);
 }
+
+// There's a bug lurking in mathlib::percentile right at the top of its
+// range. Uncomment this test and rerun the suite to see it for yourself
+// (see README Module 6 for how to track down which commit caused it).
+// TEST(PercentileTest, HundredthPercentile) {
+//     double values[] = {10.0, 20.0, 30.0, 40.0};
+//     EXPECT_DOUBLE_EQ(percentile(values, 4, 100.0), 40.0);
+// }
