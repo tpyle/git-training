@@ -70,7 +70,8 @@ long gcd(long a, long b) {
     //       a = b
     //       b = remainder
     //   return a
-    throw std::logic_error("gcd: not implemented yet");
+    
+    return a / b;
 }
 
 long lcm(long a, long b) {
