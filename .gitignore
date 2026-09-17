@@ -1,0 +1,4 @@
+bin/
+_deps/
+*.bin
+*.out
