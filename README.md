@@ -6,7 +6,7 @@ First, clone the repo: `git clone https://github.com/tpyle/git-training.git`, th
 
 Next, send Thomas (Teams: Thomas Pyle) your github ID, so he can grant you push access - you won't need it until Module 5, but it's worth getting out of the way early.
 
-Get in a group with one of your neighbors!
+Get in a group with one of your neighbors! Most modules are done solo even within a group, but Modules 5, 8, and 9 need two people interacting with each other's branches. No neighbor (odd numbers, working remotely, etc.)? Each of those three modules has a "Working alone?" section showing how to simulate a partner with a second clone.
 
 The structure of the lab is as follows:
 
@@ -114,6 +114,31 @@ hint: have locally.
 
 That's not a merge conflict - it's git refusing to let you push because your local branch is missing a commit the remote already has (your histories have diverged). Run `git pull` to fetch that commit and merge it into your branch. Since you each edited different functions, it merges cleanly with no conflict markers - run `git log --oneline --graph` afterward and you'll see both commits side by side, joined by a merge commit. Now push again - it'll go through.
 
+### Working alone?
+
+No neighbor? Simulate one with a second clone. From the directory *above* your existing clone:
+
+```sh
+git clone https://github.com/tpyle/git-training.git git-training-partner
+```
+
+This is a completely independent working copy - treat it as your "neighbor's machine" for the rest of this module (and for Module 8, if you're doing that one solo too). In it, run:
+
+```sh
+git fetch
+git switch feature/<your name>-new-functions
+```
+
+Now play both parts, one at a time:
+
+1. In your original clone (`git-training`), pick a not-yet-finished function, implement it, commit, then `git push`. This one goes through cleanly.
+2. In `git-training-partner`, pick a *different* function, implement it, commit, then `git push`. This one gets rejected - same error as above, because `origin` has moved since you cloned/fetched it.
+3. Still in `git-training-partner`, run `git pull` to bring in the other commit and merge it. Since you edited different functions, it's a clean merge - check `git log --oneline --graph`.
+4. Push again from `git-training-partner` - it goes through.
+5. Back in your original clone, `git pull` to catch up on the merge commit, so both clones agree.
+
+Keep `git-training-partner` around if you're doing Module 8 solo too.
+
 ## Module 6: Finding the cause of bugs (`git blame`)
 
 Not every bug announces itself with a compiler error. There's a commented-out test in [tests/test_stats.cpp](./tests/test_stats.cpp) - `PercentileTest.HundredthPercentile` - that calls `mathlib::percentile` with a percentile of exactly `100`. Uncomment it and rerun the suite (`ctest --test-dir build --output-on-failure`). Something's wrong - and until you uncommented it, nothing in the suite caught it.
@@ -148,6 +173,16 @@ On your own branch (`git switch feature/<your name>-new-functions`), run `git ch
 
 If it applies cleanly, you're done. If it conflicts, you'll see the same conflict markers as Module 3 - fix them, `git add` the file, then `git cherry-pick --continue` (or `git cherry-pick --abort` if you'd rather bail out entirely).
 
+### Working alone?
+
+Use the `git-training-partner` clone from Module 5 (create it the same way described there if you skipped straight to this module).
+
+1. In `git-training-partner`, pick a not-yet-finished function, implement it, and commit - but don't push it.
+2. Grab its hash: `git log --oneline -1`.
+3. Back in your original clone, add the partner clone as a temporary remote so you can see its commits without pushing anything to GitHub: `git remote add partner-sim ../git-training-partner && git fetch partner-sim`.
+4. `git cherry-pick <hash>`, same as above.
+5. Clean up the temporary remote once you're done: `git remote remove partner-sim`.
+
 ## Module 9: Opening a Pull Request
 
 Everything so far has been local git, or a raw `git push`. A pull request (PR) is GitHub's layer on top of that: a request to merge one branch into another, with a place for discussion, automated checks, and required approvals before it's allowed to land.
@@ -167,6 +202,10 @@ Before either of those finish, notice the merge button is greyed out, with somet
 *(Everything above can also be done from a terminal with the `gh` CLI, if you'd rather not leave the command line - `gh pr create`, `gh pr checks`, `gh pr review <number> --approve`.)*
 
 Worth calling out: that gating - can't merge until the check passes and someone's approved - isn't something git or GitHub does automatically for every repo. It's a branch protection rule configured on this repo's `main` branch (already set up here), requiring the `CI / build-and-test` status check and at least one approving review before the merge button unlocks. Plenty of repos you'll work in elsewhere won't have this turned on at all - it's a deliberate setting, not a given.
+
+### Working alone?
+
+You can do everything through opening the PR and watching CI turn green by yourself. The review step is the one part that genuinely doesn't work solo: GitHub refuses to let you approve your own pull request, so the merge button will stay blocked on "review required" regardless of what you do locally. To see it actually unlock, ask Thomas or another participant to approve your PR; otherwise just note what the "Files changed" tab looks like from a reviewer's perspective and move on once CI is green.
 
 # mathlib
 
