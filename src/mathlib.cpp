@@ -25,15 +25,19 @@ double divide(double numerator, double denominator) {
 }
 
 double power(double base, int exponent) {
-    if (exponent < 0) {
-        // TODO(trainee): implement negative exponents, e.g. power(2.0, -2) == 0.25
-        throw std::logic_error("power: negative exponents not implemented yet");
-    }
-
     double result = 1.0;
-    for (int i = 0; i < exponent; ++i) {
-        result *= base;
+    if (exponent < 0) {
+        for (int i = 0; i > exponent; i--)
+        {
+            result /= base;
+        }
+        return result;
+    } else {
+        for (int i = 0; i < exponent; ++i) {
+            result *= base;
+        }
     }
+    
     return result;
 }
 
