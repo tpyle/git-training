@@ -32,7 +32,7 @@ TEST(FactorialTest, TooLargeThrows) {
 // TODO(trainee): implement mathlib::gcd (Euclid's algorithm - there's
 // pseudocode in the comment above it in mathlib.cpp), then remove the
 // DISABLED_ prefix below and confirm this test passes.
-TEST(GcdTest, DISABLED_Basic) {
+TEST(GcdTest, Basic) {
     EXPECT_EQ(gcd(12, 18), 6);
     EXPECT_EQ(gcd(0, 5), 5);
     EXPECT_EQ(gcd(17, 5), 1);
