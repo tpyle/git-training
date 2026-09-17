@@ -114,17 +114,14 @@ unsigned long long fibonacci(unsigned int n) {
 }
 
 bool isPerfectSquare(long n) {
-    // TODO(trainee): implement this without floating-point sqrt() - it can
-    // round the wrong way right at the boundary for large n, giving you a
-    // wrong answer.
-    //
-    // Pseudocode:
-    //   if n < 0: return false
-    //   guess = 0
-    //   while guess * guess < n:
-    //       guess = guess + 1
-    //   return guess * guess == n
-    throw std::logic_error("isPerfectSquare: not implemented yet");
+    if (n < 0) {
+        return false;
+    }
+    long guess = 0;
+    while (guess * guess < n) {
+        ++guess;
+    }
+    return guess * guess == n;
 }
 
 }  // namespace mathlib
